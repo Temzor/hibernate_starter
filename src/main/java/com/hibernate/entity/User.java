@@ -2,10 +2,7 @@ package com.hibernate.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
@@ -24,6 +21,8 @@ public class User {
     @Column(name = "birth_day")
     private LocalDate birthDate;
     private Integer age;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
 }
