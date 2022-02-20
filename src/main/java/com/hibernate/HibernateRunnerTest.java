@@ -8,22 +8,15 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 
 class HibernateRunnerTest {
 
     @Test
     void checkReflectionApi() throws SQLException, IllegalAccessException {
         User user = User.builder()
-                .username("Ter@mail.ru")
-                .firstname("Ivan")
-                .lastname("Ivanov")
-                .birthDate(LocalDate.of(2000, 1, 20))
-                .age(21)
                 .build();
 
         String sql = """
@@ -44,13 +37,13 @@ class HibernateRunnerTest {
                 .map(field -> ofNullable(field.getAnnotation(Column.class))
                         .map(Column::name)
                         .orElse(field.getName()))
-                .collect(Collectors.joining(", "));
+                .collect(joining(", "));
 
         String columnValues = Arrays.stream(declaredFields)
                 .map(field -> "?")
-                .collect(Collectors.joining(", "));
+                .collect(joining(", "));
 
-        System.out.printf((sql) + "%n", tableName, columnNames, columnValues);
+        System.out.println(sql.formatted(tableName, columnNames, columnValues));
 
         Connection connection = null;
         PreparedStatement preparedStatement = connection.prepareStatement(sql.formatted(tableName, columnNames, columnValues));
