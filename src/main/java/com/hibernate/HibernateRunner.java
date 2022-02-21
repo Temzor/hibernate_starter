@@ -4,10 +4,10 @@ import com.hibernate.convertor.BirthdayConverter;
 import com.hibernate.entity.Birthday;
 import com.hibernate.entity.Role;
 import com.hibernate.entity.User;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class HibernateRunner {
@@ -24,6 +24,7 @@ public class HibernateRunner {
 //        configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
 //        configuration.addAnnotatedClass(User.class);
         configuration.addAttributeConverter(new BirthdayConverter());
+        configuration.registerTypeOverride(new JsonBinaryType());
         configuration.configure();
 
         try (SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -34,6 +35,12 @@ public class HibernateRunner {
                     .username("ivan@gmail1.com")
                     .firstname("Ivan")
                     .lastname("Ivanov")
+                    .info("""
+                            {
+                                "name": "Ivan",
+                                "id": 25
+                            }
+                            """)
                     .birthDate(new Birthday(LocalDate.of(2000, 1, 19)))
                     .role(Role.ADMIN)
                     .build();
