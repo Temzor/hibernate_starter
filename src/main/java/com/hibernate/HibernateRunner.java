@@ -45,6 +45,10 @@ public class HibernateRunner {
                     .role(Role.ADMIN)
                     .build();
             session.save(user);
+            session.update(user);
+            session.saveOrUpdate(user);
+            session.delete(user);
+            session.get(User.class, "ivan@gmail1.com");
 
             session.getTransaction().commit();
         }
